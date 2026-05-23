@@ -488,6 +488,10 @@ Result:
     |   |       |
     +---+---+---+
 
+## Ready Exe Files
+
+Two kind of exe files are provided. One which is the original exe file that runs just like mms is suppose to. The other once is called max-speed and this is an edited exe file that is suppsoed to make all runs at maximum renedering speed. This will be useful when debugging a code across all mazefiles so that it can happen fast.
+
 ## Building From Source
 
 If you want to write code for the simulator itself, you'll need to build the
