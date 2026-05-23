@@ -2,37 +2,46 @@
 
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QGridLayout>
 #include <QLineEdit>
+#include <QGridLayout>
 
 namespace mms {
 
 class ConfigDialog : public QDialog {
-  Q_OBJECT
 
- public:
-  ConfigDialog(QString name, QString directory, QString buildCommand,
-               QString runCommand);
+    Q_OBJECT
 
-  QString getName();
-  QString getDirectory();
-  QString getBuildCommand();
-  QString getRunCommand();
-  bool removeButtonPressed();
+public:
 
- private:
-  QLineEdit *m_name;
-  QLineEdit *m_directory;
-  QLineEdit *m_buildCommand;
-  QLineEdit *m_runCommand;
-  bool m_removeButtonPressed;
-  QDialogButtonBox *m_buttons;
+    ConfigDialog(
+        QString name,
+        QString directory,
+        QString buildCommand,
+        QString runCommand);
 
-  void onBrowseButtonPressed();
-  void onRemoveButtonPressed();
-  void validate(QString name);
+    QString getName();
+    QString getDirectory();
+    QString getBuildCommand();
+    QString getRunCommand();
+    bool removeButtonPressed();
 
-  void appendRow(QGridLayout *layout, QString label, QLineEdit *lineEdit);
+private:
+
+    QLineEdit* m_name;
+    QLineEdit* m_directory;
+    QLineEdit* m_buildCommand;
+    QLineEdit* m_runCommand;
+    bool m_removeButtonPressed;
+    QDialogButtonBox* m_buttons;
+
+    void onBrowseButtonPressed();
+    void onRemoveButtonPressed();
+    void validate(QString name);
+
+    void appendRow(
+        QGridLayout* layout,
+        QString label,
+        QLineEdit* lineEdit);
 };
 
-}  // namespace mms
+} 

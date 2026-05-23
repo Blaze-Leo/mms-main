@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QOpenGLBuffer>
+#include <QOpenGLBuffer> 
 #include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
+#include <QOpenGLShaderProgram> 
 #include <QOpenGLTexture>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLWidget>
@@ -17,66 +17,73 @@
 namespace mms {
 
 class Map : public QOpenGLWidget, protected QOpenGLFunctions {
-  // NOTE: Inheriting from QOpenGLFunctions allows
-  // us to call the OpenGL functions directly
+    
+    // NOTE: Inheriting from QOpenGLFunctions allows
+    // us to call the OpenGL functions directly
 
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  Map(QWidget *parent = 0);
+public:
 
-  void setMaze(const Maze *maze);
-  void setView(const MazeView *view);
-  void setMouseGraphic(const MouseGraphic *mouseGraphic);
+    Map(QWidget* parent = 0);
 
-  // Retrieves OpenGL version info
-  QStringList getOpenGLVersionInfo();
+    void setMaze(const Maze* maze);
+    void setView(const MazeView* view);
+    void setMouseGraphic(const MouseGraphic* mouseGraphic);
 
-  void shutdown();
+    // Retrieves OpenGL version info
+    QStringList getOpenGLVersionInfo();
 
- protected:
-  void initializeGL();
-  void paintGL();
-  void resizeGL(int width, int height);
+    void shutdown();
 
- private:
-  // Logger of OpenGL warnings and errors
-  QOpenGLDebugLogger m_openGLLogger;
-  void initOpenGLLogger();
+protected:
 
-  // TODO: upforgrabs
-  // m_maze shouldn't be necessary,
-  // MazeView should actually be MazeGraphic
+    void initializeGL();
+    void paintGL();
+    void resizeGL(int width, int height);
 
-  // No ownership here - only pointers
-  const Maze *m_maze;
-  const MazeView *m_view;
-  const MouseGraphic *m_mouseGraphic;
+private:
 
-  // The map's window size, in pixels
-  int m_windowWidth;
-  int m_windowHeight;
+    // Logger of OpenGL warnings and errors
+    QOpenGLDebugLogger m_openGLLogger;
+    void initOpenGLLogger();
 
-  // Polygon program variables
-  QOpenGLShaderProgram m_polygonProgram;
-  QOpenGLVertexArrayObject m_polygonVAO;
-  QOpenGLBuffer m_polygonVBO;
+    // TODO: upforgrabs
+    // m_maze shouldn't be necessary,
+    // MazeView should actually be MazeGraphic
 
-  // Texture program variables
-  QOpenGLTexture *m_textureAtlas;
-  QOpenGLShaderProgram m_textureProgram;
-  QOpenGLVertexArrayObject m_textureVAO;
-  QOpenGLBuffer m_textureVBO;
+    // No ownership here - only pointers
+    const Maze* m_maze;
+    const MazeView* m_view;
+    const MouseGraphic* m_mouseGraphic;
 
-  // Initialize the graphics
-  void initPolygonProgram();
-  void initTextureProgram();
+    // The map's window size, in pixels
+    int m_windowWidth;
+    int m_windowHeight;
 
-  // Drawing helper methods
-  void repopulateVertexBufferObjects(
-      const QVector<TriangleGraphic> &mouseBuffer);
-  void drawMap(QOpenGLShaderProgram *program, QOpenGLVertexArrayObject *vao,
-               int vboStartingIndex, int count);
+    // Polygon program variables
+    QOpenGLShaderProgram m_polygonProgram;
+    QOpenGLVertexArrayObject m_polygonVAO;
+    QOpenGLBuffer m_polygonVBO;
+
+    // Texture program variables
+    QOpenGLTexture* m_textureAtlas;
+    QOpenGLShaderProgram m_textureProgram;
+    QOpenGLVertexArrayObject m_textureVAO;
+    QOpenGLBuffer m_textureVBO;
+
+    // Initialize the graphics
+    void initPolygonProgram();
+    void initTextureProgram();
+
+    // Drawing helper methods
+    void repopulateVertexBufferObjects(
+        const QVector<TriangleGraphic>& mouseBuffer);
+    void drawMap(
+        QOpenGLShaderProgram* program,
+        QOpenGLVertexArrayObject* vao,
+        int vboStartingIndex,
+        int count);
 };
 
-}  // namespace mms
+} 

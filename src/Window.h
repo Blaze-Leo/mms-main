@@ -3,7 +3,6 @@
 #include <QChar>
 #include <QCloseEvent>
 #include <QComboBox>
-#include <QGridLayout>
 #include <QLabel>
 #include <QMainWindow>
 #include <QPair>
@@ -14,6 +13,7 @@
 #include <QSet>
 #include <QTimer>
 #include <QToolButton>
+#include <QGridLayout>
 
 #include "Map.h"
 #include "Maze.h"
@@ -25,212 +25,231 @@
 namespace mms {
 
 enum class Movement {
-  MOVE_STRAIGHT,
-  MOVE_DIAGONAL,
-  TURN_RIGHT_45,
-  TURN_RIGHT_90,
-  TURN_LEFT_45,
-  TURN_LEFT_90,
-  NONE,
+    MOVE_FORWARD,
+    MOVE_HALFFORWARD,
+    MOVE_DIAGONAL,
+    TURN_RIGHT,
+    TURN_LEFT,
+    TURN_RIGHT45,
+    TURN_LEFT45,
+    TURN_BACK,
+    RUN_RIGHT,
+    RUN_LEFT,
+    NONE,
 };
 
 struct Wall {
-  int x;
-  int y;
-  Direction d;
+    int x;
+    int y;
+    Direction d;
 };
 
 class Window : public QMainWindow {
-  Q_OBJECT
 
- public:
-  Window(QWidget *parent = 0);
-  void closeEvent(QCloseEvent *event);
-  void resizeEvent(QResizeEvent *event);
+    Q_OBJECT
 
- private:
-  // ----- Graphics -----
+public:
 
-  Map *m_map;
-  void scheduleMapUpdate();
+    Window(QWidget* parent = 0);
+    void closeEvent(QCloseEvent* event);
+    void resizeEvent(QResizeEvent* event);
 
-  // ----- Maze -----
+private:
 
-  Maze *m_maze;
-  MazeView *m_truth;
-  QString m_currentMazeFile;
-  QComboBox *m_mazeFileComboBox;
+    // ----- Graphics -----
 
-  void onMazeFileButtonPressed();
-  void onMazeFileComboBoxChanged(QString path);
-  void showInvalidMazeFileWarning(QString path);
-  void refreshMazeFileComboBox(QString selected);
-  void updateMazeAndPath(Maze *maze, QString path);
-  void updateMaze(Maze *maze);
+    Map* m_map;
+    void scheduleMapUpdate();
 
-  // ----- Colors -----
+    // ----- Maze -----
 
-  void onColorButtonPressed();
+    Maze* m_maze;
+    MazeView* m_truth;
+    QString m_currentMazeFile;
+    QComboBox* m_mazeFileComboBox;
 
-  // ----- Algo config -----
+    void onMazeFileButtonPressed();
+    void onMazeFileComboBoxChanged(QString path);
+    void showInvalidMazeFileWarning(QString path);
+    void refreshMazeFileComboBox(QString selected);
+    void updateMazeAndPath(Maze* maze, QString path);
+    void updateMaze(Maze* maze);
 
-  QComboBox *m_mouseAlgoComboBox;
-  QToolButton *m_mouseAlgoEditButton;
+    // ----- Colors -----
 
-  void onMouseAlgoComboBoxChanged(QString name);
-  void onMouseAlgoEditButtonPressed();
-  void onMouseAlgoImportButtonPressed();
-  void refreshMouseAlgoComboBox(QString selected);
+    void onColorButtonPressed();
 
-  // ----- Algo processes-----
+    // ----- Algo config -----
 
-  static const QString IN_PROGRESS_STYLE_SHEET;
-  static const QString COMPLETE_STYLE_SHEET;
-  static const QString CANCELED_STYLE_SHEET;
-  static const QString FAILED_STYLE_SHEET;
-  static const QString ERROR_STYLE_SHEET;
+    QComboBox* m_mouseAlgoComboBox;
+    QToolButton* m_mouseAlgoEditButton;
 
-  QTabWidget *m_mouseAlgoOutputTabWidget;
-  QPlainTextEdit *m_buildOutput;
-  QPlainTextEdit *m_runOutput;
+    void onMouseAlgoComboBoxChanged(QString name);
+    void onMouseAlgoEditButtonPressed();
+    void onMouseAlgoImportButtonPressed();
+    void refreshMouseAlgoComboBox(QString selected);
 
-  void cancelProcess(QProcess *process, QLabel *status);
-  void cancelAllProcesses();
+    // ----- Algo processes-----
 
-  // ----- Algo build -----
+    static const QString IN_PROGRESS_STYLE_SHEET;
+    static const QString COMPLETE_STYLE_SHEET;
+    static const QString CANCELED_STYLE_SHEET;
+    static const QString FAILED_STYLE_SHEET;
+    static const QString ERROR_STYLE_SHEET;
 
-  QPushButton *m_buildButton;
-  QProcess *m_buildProcess;
-  QLabel *m_buildStatus;
+    QTabWidget* m_mouseAlgoOutputTabWidget;
+    QPlainTextEdit* m_buildOutput;
+    QPlainTextEdit* m_runOutput;
 
-  void startBuild();
-  void cancelBuild();
-  void onBuildExit(int exitCode, QProcess::ExitStatus exitStatus);
+    void cancelProcess(QProcess* process, QLabel* status);
+    void cancelAllProcesses();
 
-  // ----- Algo run -----
+    // ----- Algo build -----
 
-  QPushButton *m_runButton;
-  QProcess *m_runProcess;
-  QLabel *m_runStatus;
+    QPushButton* m_buildButton;
+    QProcess* m_buildProcess;
+    QLabel* m_buildStatus;
 
-  void startRun();
-  void cancelRun();
-  void onRunExit(int exitCode, QProcess::ExitStatus exitStatus);
+    void startBuild();
+    void cancelBuild();
+    void onBuildExit(int exitCode, QProcess::ExitStatus exitStatus);
 
-  Mouse *m_mouse;
-  MazeView *m_view;
-  MouseGraphic *m_mouseGraphic;
+    // ----- Algo run -----
 
-  void removeMouseFromMaze();
+    QPushButton* m_runButton;
+    QProcess* m_runProcess;
+    QLabel* m_runStatus;
 
-  // ----- Pause/reset ----
+    void startRun();
+    void cancelRun();
+    void stopRun(QString msg);
+    void onRunExit(int exitCode, QProcess::ExitStatus exitStatus);
 
-  bool m_isPaused;
-  bool m_wasReset;
-  QPushButton *m_pauseButton;
-  QPushButton *m_resetButton;
+    Mouse* m_mouse;
+    MazeView* m_view;
+    MouseGraphic* m_mouseGraphic;
 
-  void onPauseButtonPressed();
-  void onResetButtonPressed();
+    void removeMouseFromMaze();
 
-  // ----- Communication -----
+    // ----- Pause/reset ----
 
-  static const QString ACK;
-  static const QString CRASH;
-  static const QString INVALID;
+    bool m_isPaused;
+    bool m_wasReset;
+    QPushButton* m_pauseButton;
+    QPushButton* m_resetButton;
 
-  // Buffers to hold incomplete output, only
-  // process once terminated with a newline
-  QStringList m_logBuffer;
-  QStringList m_commandBuffer;
-  QStringList processText(QString text, QStringList *buffer);
+    void onPauseButtonPressed();
+    void onResetButtonPressed();
 
-  QQueue<QString> m_commandQueue;
-  QTimer *m_commandQueueTimer;
+    // ----- Run Realistic -----
 
-  void dispatchCommand(QString command);
-  QString executeCommand(QString command);
-  void processQueuedCommands();
+    boolean m_isReal;
+    QPushButton* m_realButton;
 
-  // ----- Movement -----
+    void onRealButtonPressed();
 
-  static const int SPEED_SLIDER_MAX;
-  static const int SPEED_SLIDER_DEFAULT;
-  static const double MIN_PROGRESS_PER_SECOND;
-  static const double MAX_PROGRESS_PER_SECOND;
-  static const double MAX_SLEEP_SECONDS;
+    // ----- Communication -----
 
-  // TODO: upforgrabs
-  // Encapsulate this state in the mouse class
+    static const QString ACK;
+    static const QString CRASH;
+    static const QString INVALID;
 
-  static const SemiPosition INITIAL_STARTING_POSITION;
-  static const SemiDirection INITIAL_STARTING_DIRECTION;
+    // Buffers to hold incomplete output, only
+    // process once terminated with a newline
+    QStringList m_logBuffer;
+    QStringList m_commandBuffer;
+    QStringList processText(QString text, QStringList* buffer);
 
-  SemiPosition m_startingPosition;
-  SemiDirection m_startingDirection;
-  Movement m_movement;
-  bool m_doomedToCrash;  // if the requested movement will result in a crash
-  int m_halfStepsToMoveForward;  // the number of allowable half-steps for the
-                                 // movement
-  double m_movementProgress;
-  double m_movementStepSize;
-  QSlider *m_speedSlider;
+    QQueue<QString> m_commandQueue;
+    QTimer* m_commandQueueTimer;
 
-  double progressRequired(Movement movement);
-  void updateMouseProgress(double progress);
-  void scheduleMouseProgressUpdate();
-  bool isMoving();
+    void dispatchCommand(QString command);
+    QString executeCommand(QString command);
+    void processQueuedCommands();
 
-  // ----- Scoreboard -----
-  Stats *stats;
-  void createStat(QString name, enum StatsEnum stat, int labelRow, int labelCol,
-                  int valueRow, int valueCol, QGridLayout *layout);
+    // ----- Movement -----
 
-  // ----- API -----
+    static const int SPEED_SLIDER_MAX;
+    static const int SPEED_SLIDER_DEFAULT;
+    static const double PROGRESS_REQUIRED_FOR_MOVE;
+    static const double PROGRESS_REQUIRED_FOR_HALFMOVE;
+    static const double PROGRESS_REQUIRED_FOR_EDGEMOVE;
+    static const double PROGRESS_REQUIRED_FOR_TURN;
+    static const double PROGRESS_REQUIRED_FOR_RUNTURN;
+    static const double PROGRESS_REQUIRED_FOR_BACKTURN;
+    static const double PROGRESS_REQUIRED_FOR_HALFTURN;
+    static const double MIN_PROGRESS_PER_SECOND;
+    static const double MAX_PROGRESS_PER_SECOND;
+    static const double MAX_SLEEP_SECONDS;
 
-  int mazeWidth();
-  int mazeHeight();
+    // TODO: upforgrabs
+    // Encapsulate this state in the mouse class
 
-  // Is there a wall in front of the mouse N half-steps ahead of where it
-  // currently is? Zero means current position of the mouse.
-  bool wallFront(int halfStepsAhead);
-  bool wallRight(int halfStepsAhead);
-  bool wallLeft(int halfStepsAhead);
-  bool wallBack(int halfStepsAhead);
-  bool wallFrontRight(int halfStepsAhead);
-  bool wallFrontLeft(int halfStepsAhead);
-  bool wallBackRight(int halfStepsAhead);
-  bool wallBackLeft(int halfStepsAhead);
+    QPair<int, int> m_startingLocation;
+    Direction m_startingDirection, m_destinationDirection;
+    Movement m_movement;
+    bool m_doomedToCrash; // if the requested movement will result in a crash
+    int m_movesRemaining; // the number of allowable forward steps remaining
+    int m_sliderValue;
+    double m_movementProgress;
+    double m_movementStepSize;
+    QSlider* m_speedSlider;
 
-  bool moveForward(int numHalfSteps);
-  void turn(Movement movement);
+    double progressRequired(Movement movement);
+    void updateMouseProgress(double progress);
+    void scheduleMouseProgressUpdate();
+    bool isMoving();
 
-  void setWall(int x, int y, QChar direction);
-  void clearWall(int x, int y, QChar direction);
+    // ----- Scoreboard -----
+    Stats* stats;
+    void createStat(QString name, enum StatsEnum stat, int labelRow, int labelCol, int valueRow, int valueCol, QGridLayout* layout);
 
-  void setColor(int x, int y, QChar color);
-  void clearColor(int x, int y);
-  void clearAllColor();
+    // ----- API -----
 
-  void setText(int x, int y, QString text);
-  void clearText(int x, int y);
-  void clearAllText();
+    int mazeWidth();
+    int mazeHeight();
 
-  bool wasReset();
-  void ackReset();
+    bool wallFront(int distance);
+    bool wallHalfFront(int distance);
+    bool wallDiagonal(int distance);
+    bool wallRight();
+    bool wallLeft();
 
-  // ----- Helpers -----
+    bool moveForward(int distance);
+    void turnRight();
+    void turnLeft();
+    bool moveHalfForward(int distance);
+    bool moveDiagonal(int distance);
+    void turnBack();
+    void turnRight45();
+    void turnLeft45();
+    bool curveRight();
+    bool curveLeft();
 
-  QSet<QPair<int, int>> m_tilesWithColor;
-  QSet<QPair<int, int>> m_tilesWithText;
+    void setWall(int x, int y, QChar direction);
+    void clearWall(int x, int y, QChar direction);
 
-  QString boolToString(bool value) const;
-  bool isWall(SemiPosition semiPos, SemiDirection semiDir) const;
-  bool isWall(SemiPosition semiPos, SemiDirection semiDir,
-              int halfStepsAhead) const;
-  bool isWithinMaze(int x, int y) const;
-  Wall getOpposingWall(Wall wall) const;
-  Coordinate getCoordinate(SemiPosition semiPos) const;
+    void setColor(int x, int y, QChar color);
+    void clearColor(int x, int y);
+    void clearAllColor();
+
+    void setText(int x, int y, QString text);
+    void clearText(int x, int y);
+    void clearAllText();
+
+    bool wasReset();
+    void ackReset();
+
+    // ----- Helpers -----
+
+    QSet<QPair<int, int>> m_tilesWithColor;
+    QSet<QPair<int, int>> m_tilesWithText;
+
+    QString boolToString(bool value) const;
+    bool isWall(Wall wall) const;
+    bool isWithinMaze(int x, int y, bool half) const;
+    Wall getOpposingWall(Wall wall) const;
+    Coordinate getCenterOfTile(int x, int y) const;
 };
 
-}  // namespace mms
+} 

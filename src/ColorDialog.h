@@ -10,31 +10,41 @@
 namespace mms {
 
 class ColorDialog : public QDialog {
-  Q_OBJECT
 
- public:
-  ColorDialog(QChar tileBaseColor, QChar tileWallColor, QChar mouseBodyColor,
-              QChar mouseWheelColor, QChar tileWallIsSetColor,
-              unsigned char tileWallNotSetAlpha);
+    Q_OBJECT
 
-  QChar getTileBaseColor();
-  QChar getTileWallColor();
-  QChar getMouseBodyColor();
-  QChar getMouseWheelColor();
-  QChar getTileWallIsSetColor();
-  unsigned char getTileWallNotSetAlpha();
+public:
 
- private:
-  QComboBox *m_tileBaseColor;
-  QComboBox *m_tileWallColor;
-  QComboBox *m_mouseBodyColor;
-  QComboBox *m_mouseWheelColor;
-  QComboBox *m_tileWallIsSetColor;
-  QSpinBox *m_tileWallNotSetAlpha;
+    ColorDialog(
+        QChar tileBaseColor,
+        QChar tileWallColor,
+        QChar mouseBodyColor,
+        QChar mouseWheelColor,
+        QChar tileWallIsSetColor,
+        unsigned char tileWallNotSetAlpha);
 
-  QDialogButtonBox *m_buttons;
+    QChar getTileBaseColor();
+    QChar getTileWallColor();
+    QChar getMouseBodyColor();
+    QChar getMouseWheelColor();
+    QChar getTileWallIsSetColor();
+    unsigned char getTileWallNotSetAlpha();
 
-  void appendRow(QGridLayout *layout, QString label, QWidget *widget);
+private:
+
+    QComboBox* m_tileBaseColor;
+    QComboBox* m_tileWallColor;
+    QComboBox* m_mouseBodyColor;
+    QComboBox* m_mouseWheelColor;
+    QComboBox* m_tileWallIsSetColor;
+    QSpinBox* m_tileWallNotSetAlpha;
+
+    QDialogButtonBox* m_buttons;
+
+    void appendRow(
+        QGridLayout* layout,
+        QString label,
+        QWidget* widget);
 };
 
-}  // namespace mms
+} 

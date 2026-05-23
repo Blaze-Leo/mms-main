@@ -14,52 +14,55 @@
 namespace mms {
 
 class BufferInterface {
- public:
-  BufferInterface(QPair<int, int> mazeSize,
-                  QVector<TriangleGraphic> *graphicCpuBuffer,
-                  QVector<TriangleTexture> *textureCpuBuffer);
 
-  // Initializes and caches all possible tile text positions. We need this
-  // extra initialization function since the max size is from the algorithm.
-  void initTileGraphicText(const Distance &wallLength,
-                           const Distance &wallWidth,
-                           QPair<int, int> tileGraphicTextMaxSize);
+public:
 
-  // Returns the maximum number of rows and columns of text in a tile graphic
-  QPair<int, int> getTileGraphicTextMaxSize();
+    BufferInterface(
+        QPair<int, int> mazeSize,
+        QVector<TriangleGraphic>* graphicCpuBuffer,
+        QVector<TriangleTexture>* textureCpuBuffer);
 
-  // Fills the graphic cpu buffer and texture cpu buffer
-  void insertIntoGraphicCpuBuffer(const Polygon &polygon, Color color,
-                                  unsigned char alpha);
-  void insertIntoTextureCpuBuffer();
+    // Initializes and caches all possible tile text positions. We need this
+    // extra initialization function since the max size is from the algorithm.
+    void initTileGraphicText(
+        const Distance& wallLength,
+        const Distance& wallWidth,
+        QPair<int, int> tileGraphicTextMaxSize);
 
-  // These methods are inexpensive, and may be called many times
-  void updateTileGraphicBaseColor(int x, int y, Color color);
-  void updateTileGraphicWallColor(int x, int y, Direction direction,
-                                  Color color, unsigned char alpha);
-  void updateTileGraphicText(int x, int y, int numRows, int numCols, int row,
-                             int col, QChar c);
+    // Returns the maximum number of rows and columns of text in a tile graphic
+    QPair<int, int> getTileGraphicTextMaxSize();
 
- private:
-  // The width and height of the maze
-  QPair<int, int> m_mazeSize;
+    // Fills the graphic cpu buffer and texture cpu buffer
+    void insertIntoGraphicCpuBuffer(const Polygon& polygon, Color color, unsigned char alpha);
+    void insertIntoTextureCpuBuffer();
 
-  // CPU-side buffers
-  QVector<TriangleGraphic> *m_graphicCpuBuffer;
-  QVector<TriangleTexture> *m_textureCpuBuffer;
+    // These methods are inexpensive, and may be called many times
+    void updateTileGraphicBaseColor(int x, int y, Color color);
+    void updateTileGraphicWallColor(int x, int y, Direction direction, Color color, unsigned char alpha);
+    void updateTileGraphicText(int x, int y, int numRows, int numCols, int row, int col, QChar c);
 
-  // A cache for tile graphic text information
-  TileGraphicTextCache m_tileGraphicTextCache;
+private:
 
-  // Retrieve the indices into the graphic cpu buffer,
-  // for each specific type of Tile triangle
-  int trianglesPerTile();
-  int getTileGraphicBaseStartingIndex(int x, int y);
-  int getTileGraphicWallStartingIndex(int x, int y, Direction direction);
-  int getTileGraphicCornerStartingIndex(int x, int y, int cornerNumber);
+    // The width and height of the maze
+    QPair<int, int> m_mazeSize;
 
-  // Retrieve the indices into the texture cpu buffer
-  int getTileGraphicTextStartingIndex(int x, int y, int row, int col);
+    // CPU-side buffers
+    QVector<TriangleGraphic>* m_graphicCpuBuffer;
+    QVector<TriangleTexture>* m_textureCpuBuffer;
+
+    // A cache for tile graphic text information
+    TileGraphicTextCache m_tileGraphicTextCache;
+
+    // Retrieve the indices into the graphic cpu buffer,
+    // for each specific type of Tile triangle
+    int trianglesPerTile();
+    int getTileGraphicBaseStartingIndex(int x, int y);
+    int getTileGraphicWallStartingIndex(int x, int y, Direction direction);
+    int getTileGraphicCornerStartingIndex(int x, int y, int cornerNumber);
+
+    // Retrieve the indices into the texture cpu buffer
+    int getTileGraphicTextStartingIndex(int x, int y, int row, int col);
+
 };
 
-}  // namespace mms
+} 

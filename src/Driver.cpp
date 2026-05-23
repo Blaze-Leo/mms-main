@@ -10,24 +10,25 @@
 
 namespace mms {
 
-int Driver::drive(int argc, char *argv[]) {
-  // Make sure that this function is called just once
-  ASSERT_RUNS_JUST_ONCE();
+int Driver::drive(int argc, char* argv[]) {
 
-  // Initialize Qt
-  QApplication app(argc, argv);
+    // Make sure that this function is called just once
+    ASSERT_RUNS_JUST_ONCE();
 
-  // Initialize singletons
-  Logging::init();
-  Settings::init();
-  ColorManager::init();
+    // Initialize Qt
+    QApplication app(argc, argv);
 
-  // Create the main window
-  Window window;
-  window.show();
+    // Initialize singletons
+    Logging::init();
+    Settings::init();
+    ColorManager::init();
 
-  // Start the event loop
-  return app.exec();
+    // Create the main window
+    Window window;
+    window.show();
+
+    // Start the event loop
+    return app.exec();
 }
 
-}  // namespace mms
+} 

@@ -6,11 +6,15 @@
 namespace mms {
 
 class ProcessUtilities {
- public:
-  ProcessUtilities() = delete;
 
-  static bool start(const QString &command, const QString &directory,
-                    QProcess *process);
+public:
+
+    ProcessUtilities() = delete;
+
+    static bool start(
+        const QString& command,
+        const QString& directory,
+        QProcess* process);
 };
 
-}  // namespace mms
+} 
